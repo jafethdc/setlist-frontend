@@ -1,6 +1,7 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import Layout from '../components/Layout';
 
 const ALL_ARTISTS_QUERY = gql`
   query ALL_ARTISTS_QUERY {
@@ -14,8 +15,8 @@ const ALL_ARTISTS_QUERY = gql`
   }
 `;
 
-const Test = () => {
-  return (
+const Artists = () => (
+  <Layout>
     <Query query={ALL_ARTISTS_QUERY}>
       {({ data, error, loading }) => {
         if (loading) return <p>Loading...</p>;
@@ -23,13 +24,13 @@ const Test = () => {
         return (
           <ul>
             {data.artists.map(({ id, name }) => (
-              <div key={id}>{name}</div>
+              <li key={id}>{name}</li>
             ))}
           </ul>
         );
       }}
     </Query>
-  );
-};
+  </Layout>
+);
 
-export default Test;
+export default Artists;
