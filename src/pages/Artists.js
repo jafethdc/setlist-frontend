@@ -1,19 +1,19 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Columns, Column } from 'bloomer';
 import Layout from '../components/Layout';
 import PopularArtists from '../components/PopularArtists';
 import ArtistsBySetlists from '../components/ArtistsBySetlists';
 
 const Artists = () => (
   <Layout>
-    <Row>
-      <Col span={6}>
+    <Columns>
+      <Column isSize="1/2">
         <PopularArtists />
-      </Col>
-      <Col span={6}>
+      </Column>
+      <Column isSize="1/2">
         <ArtistsBySetlists />
-      </Col>
-    </Row>
+      </Column>
+    </Columns>
   </Layout>
 );
 

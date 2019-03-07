@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Skeleton, List } from 'antd';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -29,20 +28,17 @@ const PopularArtists = () => {
   return (
     <Query query={TOP_ATTENDED_ARTISTS_QUERY} variables={variables}>
       {({ data, error, loading }) => {
-        if (loading) return <Skeleton active />;
+        if (loading) return <p>Loading...</p>;
         if (error) return <p>Error:{error.message}</p>;
         return (
-          <List
-            bordered
-            header={<h3>Top Attended Artists</h3>}
-            dataSource={data.artists.nodes}
-            renderItem={artist => (
-              <List.Item>
+          <div className="list">
+            {data.artists.nodes.map((artist, i) => (
+              <div className="list-item" key={i}>
                 {artist.name} - {artist.setlistsCount} setlists -{' '}
                 {artist.attendancesCount} attendances
-              </List.Item>
-            )}
-          />
+              </div>
+            ))}
+          </div>
         );
       }}
     </Query>

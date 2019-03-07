@@ -8,6 +8,7 @@ import Festivals from './pages/Festivals';
 import Setlists from './pages/Setlists';
 import Statistics from './pages/Statistics';
 import Venues from './pages/Venues';
+import 'bulma/css/bulma.css';
 import './App.css';
 
 const App = () => (
