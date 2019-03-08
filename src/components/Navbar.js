@@ -40,10 +40,22 @@ const MainNavbar = ({ location }) => (
       <NavbarEnd>
         <NavbarItem>
           <div className="buttons">
-            <Button isColor="primary">
-              <strong>Sign Up</strong>
-            </Button>
-            <Button isColor="light">Log in</Button>
+            <Button
+              isColor="primary"
+              render={props => (
+                <Link to="/signup" {...props}>
+                  <strong>Sign Up</strong>
+                </Link>
+              )}
+            />
+            <Button
+              isColor="light"
+              render={props => (
+                <Link to="/signin" {...props}>
+                  Log In
+                </Link>
+              )}
+            />
           </div>
         </NavbarItem>
       </NavbarEnd>
