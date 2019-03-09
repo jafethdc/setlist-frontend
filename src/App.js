@@ -10,8 +10,7 @@ import Statistics from './pages/Statistics';
 import Venues from './pages/Venues';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
-import 'bulma/css/bulma.css';
-import './App.css';
+import './App.scss';
 
 const App = () => (
   <ApolloProvider client={apolloClient}>

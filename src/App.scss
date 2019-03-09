@@ -1,0 +1,12 @@
+@import '../node_modules/bulma/bulma.sass';
+@import './divider.scss';
+
+.alph-list-item {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.unstyled-list {
+    padding-left: 0;
+    list-style: none;
+}
