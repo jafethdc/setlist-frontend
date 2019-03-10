@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import Mutation from '../components/graphql/CustomMutation';
 import Layout from '../components/Layout';
 import SignUpForm from '../components/SignUpForm';
 

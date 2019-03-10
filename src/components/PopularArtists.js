@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Query } from 'react-apollo';
+import React from 'react';
 import gql from 'graphql-tag';
+import Query from './graphql/CustomQuery';
 
 const TOP_ATTENDED_ARTISTS_QUERY = gql`
   query TOP_ATTENDED_ARTISTS_QUERY($first: Int, $orderBy: ArtistOrder) {
@@ -16,7 +16,7 @@ const TOP_ATTENDED_ARTISTS_QUERY = gql`
 `;
 
 const PopularArtists = () => {
-  const [first] = useState(5);
+  const first = 5;
   const variables = {
     first,
     orderBy: {
@@ -27,9 +27,8 @@ const PopularArtists = () => {
 
   return (
     <Query query={TOP_ATTENDED_ARTISTS_QUERY} variables={variables}>
-      {({ data, error, loading }) => {
+      {({ data, loading }) => {
         if (loading) return <p>Loading...</p>;
-        if (error) return <p>Error:{error.message}</p>;
         return (
           <div className="list">
             {data.artists.nodes.map((artist, i) => (
