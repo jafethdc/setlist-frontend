@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 
 const CustomQuery = ({ children, ...rest }) => (
   <Mutation {...rest}>
-    {result => {
+    {(mutation, result) => {
       if (result.error)
         throw new Error(result.error.message.replace('GraphQL error: ', ''));
-      return children(result);
+      return children(mutation, result);
     }}
   </Mutation>
 );

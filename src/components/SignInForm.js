@@ -14,8 +14,6 @@ import useFormState from '../custom-hooks/useFormState';
 
 const validate = values => {
   const errors = {};
-  if (!values.name) errors.name = 'Name is required';
-  if (!values.username) errors.username = 'Username is required';
   if (!values.email) {
     errors.email = 'Email is required';
   } else if (!/(.+)@(.+){2,}\.(.+){2,}/.test(values.email)) {
@@ -23,14 +21,10 @@ const validate = values => {
   }
 
   if (!values.password) errors.password = 'Password is required';
-
-  if (values.password !== values.passwordConfirmation) {
-    errors.passwordConfirmation = "Confirmation doesn't match the password";
-  }
   return errors;
 };
 
-const SignUpForm = ({
+const SignInForm = ({
   onSubmit,
   initialValues,
   loading,
@@ -38,40 +32,11 @@ const SignUpForm = ({
 }) => {
   const [{ values, touched, errors }, { text, password }] = useFormState(
     initialValues,
-    {
-      validate,
-    }
+    { validate }
   );
 
   return (
     <form>
-      <Field>
-        <Label>Name</Label>
-        <Control>
-          <Input
-            {...text('name')}
-            isColor={touched.name && errors.name ? 'danger' : ''}
-          />
-        </Control>
-        {touched.name && errors.name && (
-          <p className="help is-danger">{errors.name}</p>
-        )}
-      </Field>
-
-      <Field>
-        <Label>Username</Label>
-        <Control className="has-icons-left">
-          <Input
-            {...text('username')}
-            isColor={touched.username && errors.username ? 'danger' : ''}
-          />
-          <Icon className="fa fa-user" isSize="small" isAlign="left" />
-        </Control>
-        {touched.username && errors.username && (
-          <p className="help is-danger">{errors.username}</p>
-        )}
-      </Field>
-
       <Field>
         <Label>Email</Label>
         <Control className="has-icons-left">
@@ -99,23 +64,6 @@ const SignUpForm = ({
         )}
       </Field>
 
-      <Field>
-        <Label>Password confirmation</Label>
-        <Control>
-          <Input
-            {...password('passwordConfirmation')}
-            isColor={
-              touched.passwordConfirmation && errors.passwordConfirmation
-                ? 'danger'
-                : ''
-            }
-          />
-        </Control>
-        {touched.passwordConfirmation && errors.passwordConfirmation && (
-          <p className="help is-danger">{errors.passwordConfirmation}</p>
-        )}
-      </Field>
-
       {submitErrors && submitErrors.length > 0 && (
         <Message isColor="danger">
           <MessageBody>
@@ -140,11 +88,11 @@ const SignUpForm = ({
   );
 };
 
-SignUpForm.propTypes = {
+SignInForm.propTypes = {
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   errors: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default SignUpForm;
+export default SignInForm;

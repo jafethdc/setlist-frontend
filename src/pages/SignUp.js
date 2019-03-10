@@ -63,16 +63,13 @@ const SignUp = () => {
   return (
     <Layout>
       <Mutation mutation={SIGN_UP_MUTATION}>
-        {(signUp, { error, loading }) => {
-          if (error) return <p>Error!</p>;
-          return (
-            <SignUpForm
-              onSubmit={handleSubmit(signUp)}
-              loading={loading}
-              errors={submitErrors}
-            />
-          );
-        }}
+        {(signUp, { loading }) => (
+          <SignUpForm
+            onSubmit={handleSubmit(signUp)}
+            loading={loading}
+            errors={submitErrors}
+          />
+        )}
       </Mutation>
     </Layout>
   );
