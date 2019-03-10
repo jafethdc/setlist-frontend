@@ -44,7 +44,7 @@ const SignUpForm = ({
   );
 
   return (
-    <form>
+    <form autoComplete="off">
       <Field>
         <Label>Name</Label>
         <Control>
@@ -64,6 +64,7 @@ const SignUpForm = ({
           <Input
             {...text('username')}
             isColor={touched.username && errors.username ? 'danger' : ''}
+            autoComplete="new-password"
           />
           <Icon className="fa fa-user" isSize="small" isAlign="left" />
         </Control>
@@ -78,6 +79,7 @@ const SignUpForm = ({
           <Input
             {...text('email')}
             isColor={touched.email && errors.email ? 'danger' : ''}
+            autoComplete="new-password"
           />
           <Icon className="fa fa-envelope" isSize="small" isAlign="left" />
         </Control>
@@ -92,6 +94,7 @@ const SignUpForm = ({
           <Input
             {...password('password')}
             isColor={touched.password && errors.password ? 'danger' : ''}
+            autoComplete="new-password"
           />
         </Control>
         {touched.password && errors.password && (

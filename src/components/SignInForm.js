@@ -36,13 +36,14 @@ const SignInForm = ({
   );
 
   return (
-    <form>
+    <form autoComplete="off">
       <Field>
         <Label>Email</Label>
         <Control className="has-icons-left">
           <Input
             {...text('email')}
             isColor={touched.email && errors.email ? 'danger' : ''}
+            autoComplete="new-password"
           />
           <Icon className="fa fa-envelope" isSize="small" isAlign="left" />
         </Control>
@@ -57,6 +58,7 @@ const SignInForm = ({
           <Input
             {...password('password')}
             isColor={touched.password && errors.password ? 'danger' : ''}
+            autoComplete="new-password"
           />
         </Control>
         {touched.password && errors.password && (
