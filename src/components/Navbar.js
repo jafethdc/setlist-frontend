@@ -12,6 +12,8 @@ import {
   Button,
   Container,
 } from 'bloomer';
+import useCurrentUser from '../custom-hooks/useCurrentUser';
+import SignOutButton from './SignOutButton';
 
 const menuItems = [
   { name: 'Setlists', to: '/setlists' },
@@ -21,47 +23,67 @@ const menuItems = [
   { name: 'Statistics', to: '/statistics' },
 ];
 
-const MainNavbar = ({ location }) => (
-  <Navbar isTransparent>
-    <Container>
-      <NavbarStart>
-        {menuItems.map((menuItem, index) => (
-          <NavbarItem
-            key={index}
-            isActive={matchPath(location.pathname, menuItem.to)}
-            render={props => (
-              <Link to={menuItem.to} {...props}>
-                {menuItem.name}
-              </Link>
-            )}
-          />
-        ))}
-      </NavbarStart>
-      <NavbarEnd>
-        <NavbarItem>
-          <div className="buttons">
-            <Button
-              isColor="primary"
+const MainNavbar = ({ location }) => {
+  const currentUser = useCurrentUser();
+
+  return (
+    <Navbar isTransparent>
+      <Container>
+        <NavbarStart>
+          {menuItems.map((menuItem, index) => (
+            <NavbarItem
+              key={index}
+              isActive={matchPath(location.pathname, menuItem.to)}
               render={props => (
-                <Link to="/signup" {...props}>
-                  <strong>Sign Up</strong>
+                <Link to={menuItem.to} {...props}>
+                  {menuItem.name}
                 </Link>
               )}
             />
-            <Button
-              isColor="light"
-              render={props => (
-                <Link to="/signin" {...props}>
-                  Log In
-                </Link>
+          ))}
+        </NavbarStart>
+        <NavbarEnd>
+          <NavbarItem>
+            <div className="buttons">
+              {currentUser ? (
+                <>
+                  <Button
+                    isColor="light"
+                    render={props => (
+                      <Link to="/profile" {...props}>
+                        Profile
+                      </Link>
+                    )}
+                  />
+                  <SignOutButton />
+                </>
+              ) : (
+                <>
+                  <Button
+                    isColor="primary"
+                    render={props => (
+                      <Link to="/signup" {...props}>
+                        <strong>Sign Up</strong>
+                      </Link>
+                    )}
+                  />
+                  <Button
+                    isColor="light"
+                    render={props => (
+                      <Link to="/signin" {...props}>
+                        Log In
+                      </Link>
+                    )}
+                  />
+                </>
               )}
-            />
-          </div>
-        </NavbarItem>
-      </NavbarEnd>
-    </Container>
-  </Navbar>
-);
+            </div>
+          </NavbarItem>
+        </NavbarEnd>
+      </Container>
+    </Navbar>
+  );
+};
 
 MainNavbar.propTypes = {
   location: PropTypes.object.isRequired,
