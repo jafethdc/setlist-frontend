@@ -2,7 +2,9 @@ import React from 'react';
 import { Mutation } from 'react-apollo';
 import PropTypes from 'prop-types';
 
-const CustomQuery = ({ children, ...rest }) => (
+// Waiting for react-apollo-hooks' useMutation to return a tuple
+// ref: https://github.com/trojanowski/react-apollo-hooks/pull/93/files
+const CustomMutation = ({ children, ...rest }) => (
   <Mutation {...rest}>
     {(mutation, result) => {
       if (result.error)
@@ -12,8 +14,8 @@ const CustomQuery = ({ children, ...rest }) => (
   </Mutation>
 );
 
-CustomQuery.propTypes = {
+CustomMutation.propTypes = {
   children: PropTypes.any.isRequired,
 };
 
-export default CustomQuery;
+export default CustomMutation;
