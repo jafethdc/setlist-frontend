@@ -9,7 +9,7 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
   <ApolloProvider client={apolloClient}>
     <ApolloHooksProvider client={apolloClient}>
-      <App />{' '}
+      <App />
     </ApolloHooksProvider>
   </ApolloProvider>,
   document.getElementById('root')
