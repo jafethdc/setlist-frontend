@@ -1,16 +1,8 @@
 import React from 'react';
-import {
-  Field,
-  Label,
-  Control,
-  Input,
-  Icon,
-  Button,
-  Message,
-  MessageBody,
-} from 'bloomer';
+import { Field, Label, Control, Input, Icon, Button, Help } from 'bloomer';
 import PropTypes from 'prop-types';
 import useFormState from '../custom-hooks/useFormState';
+import FormErrors from './FormErrors';
 
 const validate = values => {
   const errors = {};
@@ -54,7 +46,7 @@ const SignUpForm = ({
           />
         </Control>
         {touched.name && errors.name && (
-          <p className="help is-danger">{errors.name}</p>
+          <Help isColor="danger">{errors.name}</Help>
         )}
       </Field>
 
@@ -69,7 +61,7 @@ const SignUpForm = ({
           <Icon className="fa fa-user" isSize="small" isAlign="left" />
         </Control>
         {touched.username && errors.username && (
-          <p className="help is-danger">{errors.username}</p>
+          <Help isColor="danger">{errors.username}</Help>
         )}
       </Field>
 
@@ -84,7 +76,7 @@ const SignUpForm = ({
           <Icon className="fa fa-envelope" isSize="small" isAlign="left" />
         </Control>
         {touched.email && errors.email && (
-          <p className="help is-danger">{errors.email}</p>
+          <Help isColor="danger">{errors.email}</Help>
         )}
       </Field>
 
@@ -98,7 +90,7 @@ const SignUpForm = ({
           />
         </Control>
         {touched.password && errors.password && (
-          <p className="help is-danger">{errors.password}</p>
+          <Help isColor="danger">{errors.password}</Help>
         )}
       </Field>
 
@@ -115,20 +107,12 @@ const SignUpForm = ({
           />
         </Control>
         {touched.passwordConfirmation && errors.passwordConfirmation && (
-          <p className="help is-danger">{errors.passwordConfirmation}</p>
+          <Help isColor="danger">{errors.passwordConfirmation}</Help>
         )}
       </Field>
 
       {submitErrors && submitErrors.length > 0 && (
-        <Message isColor="danger">
-          <MessageBody>
-            <ul>
-              {submitErrors.map((error, i) => (
-                <li key={i}>{error}</li>
-              ))}
-            </ul>
-          </MessageBody>
-        </Message>
+        <FormErrors errors={submitErrors} />
       )}
 
       <Button
