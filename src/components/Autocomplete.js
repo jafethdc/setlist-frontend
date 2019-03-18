@@ -45,6 +45,11 @@ const Autocomplete = ({
 
   const displayDropdown = inputFocus && !loadingOptions && options;
 
+  const labelFor = option =>
+    typeof optionLabel === 'function'
+      ? optionLabel(option)
+      : option[optionLabel];
+
   const handleChange = ({ target: { value } }) => {
     setTerm(value);
     if (value) onChange(value);
@@ -52,7 +57,7 @@ const Autocomplete = ({
   };
 
   const handleSelect = option => {
-    setTerm(option.name);
+    setTerm(labelFor(option));
     onSelect(option);
     setOptions(null);
   };
@@ -95,9 +100,7 @@ const Autocomplete = ({
               onClick={() => handleSelect(option)}
               data={option}
             >
-              {typeof optionLabel === 'function'
-                ? optionLabel(option)
-                : option[optionLabel]}
+              {labelFor(option)}
             </Option>
           ))}
         </ul>
