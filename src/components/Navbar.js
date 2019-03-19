@@ -33,7 +33,10 @@ const MainNavbar = ({ location }) => {
           {menuItems.map((menuItem, index) => (
             <NavbarItem
               key={index}
-              isActive={matchPath(location.pathname, menuItem.to)}
+              isActive={matchPath(location.pathname, {
+                path: menuItem.to,
+                exact: true,
+              })}
               render={props => (
                 <Link to={menuItem.to} {...props}>
                   {menuItem.name}
@@ -47,6 +50,14 @@ const MainNavbar = ({ location }) => {
             <div className="buttons">
               {currentUser ? (
                 <>
+                  <Button
+                    isColor="primary"
+                    render={props => (
+                      <Link to="/setlists/new" {...props}>
+                        <strong>Add Setlist</strong>
+                      </Link>
+                    )}
+                  />
                   <Button
                     isColor="light"
                     render={props => (

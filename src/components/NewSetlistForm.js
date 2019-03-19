@@ -13,7 +13,7 @@ const validate = values => {
   return errors;
 };
 
-const NewSetlistForm = ({ onSubmit, errors: submitErrors }) => {
+const NewSetlistForm = ({ onSubmit, loading, errors: submitErrors }) => {
   const [artistId, setArtistId] = useState(null);
   const [venueId, setVenueId] = useState(null);
   const [date, setDate] = useState(null);
@@ -35,7 +35,7 @@ const NewSetlistForm = ({ onSubmit, errors: submitErrors }) => {
         <Label>Artist</Label>
         <ArtistAutocomplete
           onChange={() => setArtistId(null)}
-          onSelect={artist => setArtistId(artist.id)}
+          onSelect={artist => setArtistId(parseInt(artist.id))}
         />
         {errors.artistId && <Help isColor="danger">{errors.artistId}</Help>}
       </Field>
@@ -43,7 +43,7 @@ const NewSetlistForm = ({ onSubmit, errors: submitErrors }) => {
         <Label>Venue</Label>
         <VenueAutocomplete
           onChange={() => setVenueId(null)}
-          onSelect={venue => setVenueId(venue.id)}
+          onSelect={venue => setVenueId(parseInt(venue.id))}
         />
         {errors.venueId && <Help isColor="danger">{errors.venueId}</Help>}
       </Field>
@@ -75,6 +75,7 @@ const NewSetlistForm = ({ onSubmit, errors: submitErrors }) => {
 
       <Button
         isColor="primary"
+        disabled={loading}
         onClick={() => handleSubmit({ artistId, venueId, date, comment })}
       >
         Submit
@@ -86,6 +87,7 @@ const NewSetlistForm = ({ onSubmit, errors: submitErrors }) => {
 NewSetlistForm.propTypes = {
   onSubmit: PropTypes.func,
   errors: PropTypes.arrayOf(PropTypes.string),
+  loading: PropTypes.bool,
 };
 
 export default NewSetlistForm;
