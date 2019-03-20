@@ -3,6 +3,8 @@ import gql from 'graphql-tag';
 import Mutation from '../components/graphql/CustomMutation';
 import Layout from '../components/Layout';
 import SignUpForm from '../components/SignUpForm';
+import { SIGN_IN_MUTATION } from './SignIn';
+import { ME_QUERY } from '../custom-hooks/useCurrentUser';
 
 const SIGN_UP_MUTATION = gql`
   mutation SIGN_UP_MUTATION(
@@ -35,7 +37,7 @@ const SIGN_UP_MUTATION = gql`
 const SignUp = () => {
   const [submitErrors, setSubmitErrors] = useState([]);
 
-  const handleSubmit = signUp => async ({
+  const handleSubmit = (signUpMutation, signInMutation) => async ({
     name,
     username,
     email,
@@ -43,10 +45,8 @@ const SignUp = () => {
     passwordConfirmation,
   }) => {
     const {
-      data: {
-        signUp: { errors, user },
-      },
-    } = await signUp({
+      data: { signUp },
+    } = await signUpMutation({
       variables: {
         name,
         username,
@@ -56,19 +56,37 @@ const SignUp = () => {
       },
     });
 
-    console.log('resultados!', { errors, user });
-    setSubmitErrors(errors);
+    setSubmitErrors(signUp.errors);
+
+    if (!signUp.errors.length) {
+      const {
+        data: { signIn },
+      } = await signInMutation({
+        variables: { email, password },
+      });
+
+      setSubmitErrors(signIn.errors);
+    }
   };
 
   return (
     <Layout>
       <Mutation mutation={SIGN_UP_MUTATION}>
-        {(signUp, { loading }) => (
-          <SignUpForm
-            onSubmit={handleSubmit(signUp)}
-            loading={loading}
-            errors={submitErrors}
-          />
+        {(signUp, { loading: signUpLoading }) => (
+          <Mutation
+            mutation={SIGN_IN_MUTATION}
+            refetchQueries={({ data }) =>
+              data.signIn.errors.length ? [] : [{ query: ME_QUERY }]
+            }
+          >
+            {(signIn, { loading: signInLoading }) => (
+              <SignUpForm
+                onSubmit={handleSubmit(signUp, signIn)}
+                loading={signUpLoading || signInLoading}
+                errors={submitErrors}
+              />
+            )}
+          </Mutation>
         )}
       </Mutation>
     </Layout>

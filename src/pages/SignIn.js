@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 import SignInForm from '../components/SignInForm';
 import { ME_QUERY } from '../custom-hooks/useCurrentUser';
 
-const SIGN_IN_MUTATION = gql`
+export const SIGN_IN_MUTATION = gql`
   mutation SIGN_IN_MUTATION($email: String!, $password: String!) {
     signIn(input: { email: $email, password: $password }) {
       errors
