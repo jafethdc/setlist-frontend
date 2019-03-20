@@ -7,25 +7,29 @@ import FormErrors from './FormErrors';
 
 const validate = values => {
   const errors = {};
-  if (!values.artistId) errors.artistId = 'Artist is required';
-  if (!values.venueId) errors.venueId = 'Venue is required';
+  if (!values.artist) errors.artist = 'Artist is required';
+  if (!values.venue) errors.venue = 'Venue is required';
   if (!values.date) errors.date = 'Date is required';
   return errors;
 };
 
-const NewSetlistForm = ({ onSubmit, loading, errors: submitErrors }) => {
-  const [artistId, setArtistId] = useState(null);
-  const [venueId, setVenueId] = useState(null);
+const NewSetlistForm = ({
+  onSubmit,
+  onPreview,
+  loading,
+  errors: submitErrors,
+}) => {
+  const [artist, setArtist] = useState(null);
+  const [venue, setVenue] = useState(null);
   const [date, setDate] = useState(null);
   const [comment, setComment] = useState(null);
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = values => {
-    const newErrors = validate(values);
-    if (Object.keys(newErrors).length) {
-      setErrors(newErrors);
-    } else {
-      onSubmit(values);
+  const handleClick = action => () => {
+    const newErrors = validate({ artist, venue, date, comment });
+    setErrors(newErrors);
+    if (!Object.keys(newErrors).length) {
+      action({ artist, venue, date, comment });
     }
   };
 
@@ -34,18 +38,18 @@ const NewSetlistForm = ({ onSubmit, loading, errors: submitErrors }) => {
       <Field>
         <Label>Artist</Label>
         <ArtistAutocomplete
-          onChange={() => setArtistId(null)}
-          onSelect={artist => setArtistId(parseInt(artist.id))}
+          onChange={() => setArtist(null)}
+          onSelect={setArtist}
         />
-        {errors.artistId && <Help isColor="danger">{errors.artistId}</Help>}
+        {errors.artist && <Help isColor="danger">{errors.artist}</Help>}
       </Field>
       <Field>
         <Label>Venue</Label>
         <VenueAutocomplete
-          onChange={() => setVenueId(null)}
-          onSelect={venue => setVenueId(parseInt(venue.id))}
+          onChange={() => setVenue(null)}
+          onSelect={setVenue}
         />
-        {errors.venueId && <Help isColor="danger">{errors.venueId}</Help>}
+        {errors.venue && <Help isColor="danger">{errors.venue}</Help>}
       </Field>
       <Field>
         <Label>Event Date</Label>
@@ -73,19 +77,26 @@ const NewSetlistForm = ({ onSubmit, loading, errors: submitErrors }) => {
         <FormErrors errors={submitErrors} />
       )}
 
-      <Button
-        isColor="primary"
-        disabled={loading}
-        onClick={() => handleSubmit({ artistId, venueId, date, comment })}
-      >
-        Submit
-      </Button>
+      <div className="buttons">
+        <Button
+          isColor="primary"
+          disabled={loading}
+          onClick={handleClick(onSubmit)}
+        >
+          Submit
+        </Button>
+
+        <Button isColor="secondary" onClick={handleClick(onPreview)}>
+          Preview
+        </Button>
+      </div>
     </form>
   );
 };
 
 NewSetlistForm.propTypes = {
   onSubmit: PropTypes.func,
+  onPreview: PropTypes.func,
   errors: PropTypes.arrayOf(PropTypes.string),
   loading: PropTypes.bool,
 };

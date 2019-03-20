@@ -1,6 +1,7 @@
 @import '../node_modules/bulma/bulma.sass';
-@import './divider.scss';
+@import './divider.sass';
 @import './components/Autocomplete.scss';
+@import './components/Setlist.scss';
 
 .alph-list-item {
     padding-left: 2px;

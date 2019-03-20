@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Title, Columns, Column } from 'bloomer';
+import { Title, Columns, Column, Button } from 'bloomer';
 import gql from 'graphql-tag';
 import Mutation from '../components/graphql/CustomMutation';
 import Layout from '../components/Layout';
 import NewSetlistForm from '../components/NewSetlistForm';
+import Setlist from '../components/Setlist';
 
 const CREATE_SETLIST_MUTATION = gql`
   mutation CREATE_SETLIST_MUTATION(
@@ -31,10 +32,11 @@ const CREATE_SETLIST_MUTATION = gql`
 
 const NewSetlist = () => {
   const [submitErrors, setSubmitErrors] = useState([]);
+  const [setlistPreview, setSetlistPreview] = useState(null);
 
   const handleSubmit = createSetlist => async ({
-    artistId,
-    venueId,
+    artist,
+    venue,
     date,
     comment,
   }) => {
@@ -44,8 +46,8 @@ const NewSetlist = () => {
       },
     } = await createSetlist({
       variables: {
-        artistId,
-        venueId,
+        artistId: parseInt(artist.id),
+        venueId: parseInt(venue.id),
         date,
         comment,
       },
@@ -59,17 +61,32 @@ const NewSetlist = () => {
     <Layout>
       <Title isSize={3}>New Setlist</Title>
       <Columns>
-        <Column isSize="1/3">
+        <Column isSize="1/2">
           <Mutation mutation={CREATE_SETLIST_MUTATION}>
             {(createSetlist, { loading }) => (
               <NewSetlistForm
                 onSubmit={handleSubmit(createSetlist)}
+                onPreview={setSetlistPreview}
                 loading={loading}
                 errors={submitErrors}
               />
             )}
           </Mutation>
         </Column>
+        {setlistPreview && (
+          <>
+            <div className="is-divider-vertical" />
+            <Column isSize="1/2">
+              <Setlist setlist={setlistPreview} />
+              <Button
+                isColor="secondary"
+                onClick={() => setSetlistPreview(null)}
+              >
+                Hide preview
+              </Button>
+            </Column>
+          </>
+        )}
       </Columns>
     </Layout>
   );

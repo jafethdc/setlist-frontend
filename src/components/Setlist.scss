@@ -1,0 +1,30 @@
+@mixin full-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.setlist-date {
+    @include full-center;
+
+    background-color: $primary;
+    color: $white;
+    border-radius: 3px;
+    padding: 10px 0;
+
+    .setlist-date-content {
+        div {
+            width: 100%;
+            text-align: center;
+
+            &:nth-child(2) {
+                font-size: $size-3;
+                font-weight: $weight-medium;
+            }
+        }
+    }
+}
+
+.setlist-footer {
+    padding: $size-small;
+}
