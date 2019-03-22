@@ -10,6 +10,7 @@ import Artists from './pages/Artists';
 import Festivals from './pages/Festivals';
 import Setlists from './pages/Setlists';
 import NewSetlist from './pages/NewSetlist';
+import EditSetlist from './pages/EditSetlist';
 import Statistics from './pages/Statistics';
 import Venues from './pages/Venues';
 import SignUp from './pages/SignUp';
@@ -25,6 +26,7 @@ const App = () => {
         <Route exact path="/" component={Index} />
         <Route path="/festivals" component={Festivals} />
         <Route path="/setlists/new" component={NewSetlist} />
+        <Route path="/setlists/edit/:id" component={EditSetlist} />
         <Route path="/setlists" component={Setlists} />
         <Route path="/venues" component={Venues} />
         <Route path="/artists" component={Artists} />
