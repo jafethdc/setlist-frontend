@@ -23,6 +23,7 @@ const Option = ({ isActive, onMouseOver, onClick, children }) => (
     {children}
   </div>
 );
+
 Option.propTypes = {
   isActive: PropTypes.bool,
   onMouseOver: PropTypes.func,
@@ -37,8 +38,9 @@ const Autocomplete = ({
   loadingOptions,
   optionLabel,
   placeholder,
+  initialValue,
 }) => {
-  const [term, setTerm] = useState('');
+  const [term, setTerm] = useState(initialValue);
   const [activeOption, setActiveOption] = useState(-1);
   const [inputFocus, setInputFocus] = useState(false);
   const [options, setOptions] = useState(null);
@@ -86,6 +88,7 @@ const Autocomplete = ({
 
   useEffect(() => setOptions(incomingOptions), [incomingOptions]);
   useEffect(() => setActiveOption(-1), [options]);
+  useEffect(() => setTerm(initialValue), [initialValue]);
 
   let dropdownContent = null;
   if (displayDropdown) {
@@ -140,6 +143,7 @@ Autocomplete.propTypes = {
   loadingOptions: PropTypes.bool,
   optionLabel: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
   placeholder: PropTypes.string,
+  initialValue: PropTypes.string,
 };
 
 Autocomplete.defaultProps = {

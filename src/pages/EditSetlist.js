@@ -1,10 +1,10 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
-import { Content } from 'bloomer';
-import JSONTree from 'react-json-tree';
+import { Title, Subtitle } from 'bloomer';
 import Layout from '../components/Layout';
 import useQuery from '../custom-hooks/useCustomQuery';
+import EditSetlistForm from '../components/EditSetlistForm';
 
 const GET_SETLIST_QUERY = gql`
   query GET_SETLIST_QUERY($id: Int) {
@@ -12,6 +12,7 @@ const GET_SETLIST_QUERY = gql`
       id
       date
       artist {
+        id
         name
       }
       venue {
@@ -48,7 +49,10 @@ const GET_SETLIST_QUERY = gql`
 `;
 
 const EditSetlist = ({ match }) => {
-  const { data, loading } = useQuery(GET_SETLIST_QUERY, {
+  const {
+    data: { setlist },
+    loading,
+  } = useQuery(GET_SETLIST_QUERY, {
     variables: {
       id: parseInt(match.params.id),
     },
@@ -56,13 +60,19 @@ const EditSetlist = ({ match }) => {
 
   return (
     <Layout>
-      Edit Setlist for {match.params.id}
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <Content>
-          <JSONTree data={data} />
-        </Content>
+        <>
+          <Title isSize={3}>{setlist.artist.name}</Title>
+          <Subtitle isSize={4}>{`${setlist.venue.name}, ${
+            setlist.venue.city.name
+          }, ${setlist.venue.city.country.name}`}</Subtitle>
+          <EditSetlistForm
+            initialValues={setlist}
+            onSubmit={values => console.log('submit edit setlist', values)}
+          />
+        </>
       )}
     </Layout>
   );
