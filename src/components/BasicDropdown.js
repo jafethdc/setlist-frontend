@@ -18,7 +18,9 @@ const BasicDropdown = ({ children, trigger }) => {
         {trigger}
       </DropdownTrigger>
       <DropdownMenu>
-        <DropdownContent>{children}</DropdownContent>
+        <DropdownContent>
+          {children({ dropdownActive, setDropdownActive })}
+        </DropdownContent>
       </DropdownMenu>
     </div>
   );

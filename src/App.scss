@@ -12,3 +12,27 @@
     padding-left: 0;
     list-style: none;
 }
+
+.hoverable.dropdown-item {
+    cursor: pointer;
+    &:hover {
+        background-color: whitesmoke;
+        color: #0a0a0a;
+    }
+}
+
+.setlist-item {
+    .columns {
+        margin-top: 0;
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .column {
+            padding: 0.30rem;
+        }
+    }
+    &.field:not(:last-child) {
+        margin-bottom: 0;
+    }
+}

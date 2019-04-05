@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import uuid from 'uuid/v1';
 import PropTypes from 'prop-types';
-import { Button, Field, Control, Label, TextArea } from 'bloomer';
+import {
+  Button,
+  Field,
+  Control,
+  Label,
+  TextArea,
+  Icon,
+  DropdownItem,
+} from 'bloomer';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import SetlistItemInput from './SetlistItemInput';
 import reorder from '../lib/reorder';
+import BasicDropdown from './BasicDropdown';
 
 const EditSetlistForm = ({ initialValues, onSubmit }) => {
   const [values, setValues] = useState(initialValues);
@@ -19,6 +29,14 @@ const EditSetlistForm = ({ initialValues, onSubmit }) => {
         ...values.items.slice(index + 1),
       ],
     });
+
+  const addItem = type => setDropdownActive => () => {
+    setValues({
+      ...values,
+      items: [...values.items, { type, _id: uuid() }],
+    });
+    setDropdownActive(false);
+  };
 
   const onDragEnd = result => {
     if (!result.destination) return;
@@ -43,10 +61,13 @@ const EditSetlistForm = ({ initialValues, onSubmit }) => {
               ref={droppableProvided.innerRef}
             >
               {values.items.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
+                <Draggable
+                  key={item.id || item._id}
+                  draggableId={item.id || item._id}
+                  index={index}
+                >
                   {draggableProvided => (
                     <SetlistItemInput
-                      key={item.id}
                       value={item}
                       artistId={parseInt(initialValues.artist.id)}
                       onChange={handleChange(index)}
@@ -65,6 +86,42 @@ const EditSetlistForm = ({ initialValues, onSubmit }) => {
           )}
         </Droppable>
       </DragDropContext>
+
+      <Field>
+        <Control>
+          <BasicDropdown
+            trigger={
+              <Button isOutlined>
+                Add Item &nbsp;
+                <Icon className="fa fa-angle-down" isSize="small" />
+              </Button>
+            }
+          >
+            {({ setDropdownActive }) => (
+              <>
+                <DropdownItem
+                  className="hoverable"
+                  onClick={addItem('set')(setDropdownActive)}
+                >
+                  Set
+                </DropdownItem>
+                <DropdownItem
+                  className="hoverable"
+                  onClick={addItem('track')(setDropdownActive)}
+                >
+                  Track
+                </DropdownItem>
+                <DropdownItem
+                  className="hoverable"
+                  onClick={addItem('tape')(setDropdownActive)}
+                >
+                  Tape
+                </DropdownItem>
+              </>
+            )}
+          </BasicDropdown>
+        </Control>
+      </Field>
 
       <Field>
         <Label>Edit comment</Label>

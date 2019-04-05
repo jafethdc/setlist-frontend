@@ -21,14 +21,12 @@ const SetlistItemInput = forwardRef(
     <div className="field setlist-item" ref={ref} {...rest}>
       <Columns>
         <Column isSize={1}>
-          <Tag isColor="light" className="setlist-item-label">
-            {value.type}
-          </Tag>
+          <Tag isColor="light">{value.type}</Tag>
         </Column>
 
         {value.type !== 'set' && (
           <Column isSize={3}>
-            <Field hasAddons className="setlist-item-input">
+            <Field hasAddons>
               <Control>
                 <Button isStatic>Track</Button>
               </Control>
@@ -37,7 +35,11 @@ const SetlistItemInput = forwardRef(
                   onChange={() => onChange({ ...value, track: null })}
                   onSelect={track => onChange({ ...value, track })}
                   artistId={value.isCover ? undefined : artistId}
-                  initialValue={defaultValue.track.name}
+                  initialValue={
+                    defaultValue && defaultValue.track
+                      ? defaultValue.track.name
+                      : ''
+                  }
                 />
               </Control>
             </Field>
@@ -45,7 +47,7 @@ const SetlistItemInput = forwardRef(
         )}
 
         <Column isSize={3}>
-          <Field hasAddons className="setlist-item-input">
+          <Field hasAddons>
             <Control>
               <Button isStatic>Info</Button>
             </Control>
@@ -62,7 +64,7 @@ const SetlistItemInput = forwardRef(
 
         {value.type === 'track' && (
           <Column isSize={3}>
-            <Field hasAddons className="setlist-item-input">
+            <Field hasAddons>
               <Control>
                 <Button isStatic>Ft.</Button>
               </Control>
@@ -73,7 +75,7 @@ const SetlistItemInput = forwardRef(
                     onChange({ ...value, featuringArtist })
                   }
                   initialValue={
-                    defaultValue.featuringArtist
+                    defaultValue && defaultValue.featuringArtist
                       ? defaultValue.featuringArtist.name
                       : ''
                   }
@@ -84,7 +86,7 @@ const SetlistItemInput = forwardRef(
         )}
 
         <Column isSize={2}>
-          <Field className="setlist-item-dropdown">
+          <Field>
             <Control>
               <BasicDropdown
                 trigger={
@@ -93,24 +95,30 @@ const SetlistItemInput = forwardRef(
                   </Button>
                 }
               >
-                {value.type !== 'set' && (
-                  <DropdownItem>
-                    <Field>
-                      <Control>
-                        <Checkbox
-                          checked={value.isCover}
-                          onChange={e =>
-                            onChange({ ...value, isCover: e.target.checked })
-                          }
-                        >
-                          {' '}
-                          Is cover?
-                        </Checkbox>
-                      </Control>
-                    </Field>
-                  </DropdownItem>
+                {() => (
+                  <>
+                    {value.type !== 'set' && (
+                      <DropdownItem>
+                        <Field>
+                          <Control>
+                            <Checkbox
+                              checked={value.isCover}
+                              onChange={e =>
+                                onChange({
+                                  ...value,
+                                  isCover: e.target.checked,
+                                })
+                              }
+                            >
+                              &nbsp;Is cover?
+                            </Checkbox>
+                          </Control>
+                        </Field>
+                      </DropdownItem>
+                    )}
+                    <DropdownItem className="hoverable">Delete</DropdownItem>
+                  </>
                 )}
-                <DropdownItem href="#">Delete</DropdownItem>
               </BasicDropdown>
             </Control>
           </Field>
