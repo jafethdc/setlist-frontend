@@ -21,6 +21,7 @@
     "react-json-tree": "^0.11.2",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.5",
+    "source-map-explorer": "^1.8.0",
     "yup": "^0.26.10"
   },
   "scripts": {
@@ -29,7 +30,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
