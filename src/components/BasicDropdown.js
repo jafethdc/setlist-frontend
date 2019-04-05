@@ -3,7 +3,7 @@ import { DropdownTrigger, DropdownContent, DropdownMenu } from 'bloomer';
 import PropTypes from 'prop-types';
 import useOnClickOutside from '../custom-hooks/useOnClickOutside';
 
-const CustomDropdown = ({ children, trigger }) => {
+const BasicDropdown = ({ children, trigger }) => {
   const [dropdownActive, setDropdownActive] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -24,9 +24,9 @@ const CustomDropdown = ({ children, trigger }) => {
   );
 };
 
-CustomDropdown.propTypes = {
+BasicDropdown.propTypes = {
   children: PropTypes.any,
   trigger: PropTypes.any,
 };
 
-export default CustomDropdown;
+export default BasicDropdown;
