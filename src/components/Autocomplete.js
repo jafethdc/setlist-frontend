@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Control, Input } from 'bloomer';
 import PropTypes from 'prop-types';
 
@@ -34,8 +34,7 @@ Option.propTypes = {
 const Autocomplete = ({
   onChange,
   onSelect,
-  options: incomingOptions,
-  loadingOptions,
+  fetchOptions,
   optionLabel,
   placeholder,
   initialValue,
@@ -44,18 +43,36 @@ const Autocomplete = ({
   const [activeOption, setActiveOption] = useState(-1);
   const [inputFocus, setInputFocus] = useState(false);
   const [options, setOptions] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const timerRef = useRef();
 
-  const displayDropdown = inputFocus && !loadingOptions && options;
+  const displayDropdown = inputFocus && !loading && options;
 
   const labelFor = option =>
     typeof optionLabel === 'function'
       ? optionLabel(option)
       : option[optionLabel];
 
+  const updateOptions = async value => {
+    try {
+      setLoading(true);
+      const newOptions = await fetchOptions(value);
+      setOptions(newOptions);
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleChange = ({ target: { value } }) => {
     setTerm(value);
-    if (value) onChange(value);
-    else setOptions(null);
+    if (value) {
+      onChange(value);
+
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => updateOptions(value), 750);
+    } else setOptions(null);
   };
 
   const handleSelect = option => {
@@ -66,7 +83,7 @@ const Autocomplete = ({
 
   const handleOnFocus = () => {
     setInputFocus(true);
-    if (term) onChange(term);
+    if (term) updateOptions(term);
   };
 
   const handleKeyDown = ({ keyCode }) => {
@@ -86,7 +103,6 @@ const Autocomplete = ({
     }
   };
 
-  useEffect(() => setOptions(incomingOptions), [incomingOptions]);
   useEffect(() => setActiveOption(-1), [options]);
   useEffect(() => setTerm(initialValue), [initialValue]);
 
@@ -119,7 +135,7 @@ const Autocomplete = ({
 
   return (
     <div className="autocomplete">
-      <Control isLoading={loadingOptions}>
+      <Control isLoading={loading}>
         <Input
           value={term}
           onChange={handleChange}
@@ -139,15 +155,14 @@ const Autocomplete = ({
 Autocomplete.propTypes = {
   onChange: PropTypes.func,
   onSelect: PropTypes.func,
-  options: PropTypes.array,
-  loadingOptions: PropTypes.bool,
+  fetchOptions: PropTypes.func,
   optionLabel: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
   placeholder: PropTypes.string,
   initialValue: PropTypes.string,
 };
 
 Autocomplete.defaultProps = {
-  loadingOptions: false,
+  initialValue: '',
 };
 
 export default Autocomplete;

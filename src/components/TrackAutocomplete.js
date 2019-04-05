@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import gql from 'graphql-tag';
 import { useApolloClient } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 import Autocomplete from './Autocomplete';
-import debounce from '../lib/debounce';
 
 const FILTER_TRACKS_QUERY = gql`
   query FILTER_TRACKS_QUERY($where: TrackWhere, $first: Int) {
@@ -23,41 +22,27 @@ const FILTER_TRACKS_QUERY = gql`
   }
 `;
 
-const TrackAutocomplete = ({ onSelect, onChange, initialValue, artistId }) => {
+const TrackAutocomplete = ({ artistId, ...rest }) => {
   const client = useApolloClient();
-  const [options, setOptions] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = async value => {
-    console.log('trackautocomplete handlechange');
-    try {
-      onChange(value);
-      setLoading(true);
-      const { data } = await client.query({
-        query: FILTER_TRACKS_QUERY,
-        variables: {
-          where: {
-            nameContains: value.toLowerCase(),
-            artistId,
-          },
-          first: 20,
+  const fetchOptions = async value => {
+    const { data } = await client.query({
+      query: FILTER_TRACKS_QUERY,
+      variables: {
+        where: {
+          nameContains: value.toLowerCase(),
+          artistId,
         },
-      });
-      setOptions(data.tracks.nodes);
-    } catch (error) {
-      console.log('Error fetching [FILTER_TRACKS_QUERY]', error);
-    } finally {
-      setLoading(false);
-    }
+        first: 20,
+      },
+    });
+    return data.tracks.nodes;
   };
 
   return (
     <Autocomplete
-      onChange={debounce(handleChange, 300)}
-      onSelect={onSelect}
-      options={options}
-      loadingOptions={loading}
-      initialValue={initialValue}
+      {...rest}
+      fetchOptions={fetchOptions}
       optionLabel="name"
       placeholder="Type some track's name"
     />
@@ -65,9 +50,6 @@ const TrackAutocomplete = ({ onSelect, onChange, initialValue, artistId }) => {
 };
 
 TrackAutocomplete.propTypes = {
-  onSelect: PropTypes.func,
-  onChange: PropTypes.func,
-  initialValue: PropTypes.string,
   artistId: PropTypes.number,
 };
 

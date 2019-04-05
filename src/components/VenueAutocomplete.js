@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import gql from 'graphql-tag';
 import { useApolloClient } from 'react-apollo-hooks';
-import PropTypes from 'prop-types';
 import Autocomplete from './Autocomplete';
-import debounce from '../lib/debounce';
 
 const FILTER_VENUES_QUERY = gql`
   query FILTER_VENUES_QUERY($where: VenueWhere, $first: Int) {
@@ -22,53 +20,36 @@ const FILTER_VENUES_QUERY = gql`
   }
 `;
 
-const VenueAutocomplete = ({ onSelect, onChange }) => {
+const VenueAutocomplete = props => {
   const client = useApolloClient();
-  const [options, setOptions] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = async value => {
-    try {
-      onChange(value);
-      setLoading(true);
-      const { data } = await client.query({
-        query: FILTER_VENUES_QUERY,
-        variables: {
-          where: {
-            fullNameContains: value
-              .toLowerCase()
-              .split(',')
-              .map(x => x.trim())
-              .join(''),
-          },
-          first: 20,
+  const fetchOptions = async value => {
+    const { data } = await client.query({
+      query: FILTER_VENUES_QUERY,
+      variables: {
+        where: {
+          fullNameContains: value
+            .toLowerCase()
+            .split(',')
+            .map(x => x.trim())
+            .join(''),
         },
-      });
-      setOptions(data.venues.nodes);
-    } catch (error) {
-      console.log('Error fetching [FILTER_VENUES_QUERY]', error);
-    } finally {
-      setLoading(false);
-    }
+        first: 20,
+      },
+    });
+    return data.venues.nodes;
   };
 
   return (
     <Autocomplete
-      onChange={debounce(handleChange, 300)}
-      onSelect={onSelect}
-      options={options}
-      loadingOptions={loading}
+      {...props}
+      fetchOptions={fetchOptions}
       optionLabel={option =>
         `${option.name}, ${option.city.name}, ${option.city.country.name}`
       }
       placeholder="Type some venue's name"
     />
   );
-};
-
-VenueAutocomplete.propTypes = {
-  onSelect: PropTypes.func,
-  onChange: PropTypes.func,
 };
 
 export default VenueAutocomplete;
