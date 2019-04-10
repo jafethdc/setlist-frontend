@@ -25,12 +25,12 @@ const ItemsList = ({ items, onChange, defaultValues, artistId }) => {
   const updateItem = useCallback(
     (i, item) =>
       onChange(_items => [..._items.slice(0, i), item, ..._items.slice(i + 1)]),
-    []
+    [onChange]
   );
 
   const removeItem = useCallback(
     i => onChange(_items => [..._items.slice(0, i), ..._items.slice(i + 1)]),
-    []
+    [onChange]
   );
 
   const reorderItems = ({ source, destination }) => {
