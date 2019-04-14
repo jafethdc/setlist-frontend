@@ -18,7 +18,16 @@ import BasicDropdown from './BasicDropdown';
 
 const SetlistItemInput = forwardRef(
   (
-    { value, onChange, onRemove, artistId, defaultValue, index, ...rest },
+    {
+      value,
+      onChange,
+      onRemove,
+      artistId,
+      defaultValue,
+      index,
+      error,
+      ...rest
+    },
     ref
   ) => {
     const handleChange = change => onChange(index, { ...value, ...change });
@@ -46,6 +55,7 @@ const SetlistItemInput = forwardRef(
                         ? defaultValue.track.name
                         : ''
                     }
+                    error={error.track}
                   />
                 </Control>
               </Field>
@@ -63,6 +73,7 @@ const SetlistItemInput = forwardRef(
                   name="input"
                   value={value.info || ''}
                   onChange={e => handleChange({ info: e.target.value })}
+                  className={error.info ? 'is-danger' : ''}
                 />
               </Control>
             </Field>
@@ -85,6 +96,7 @@ const SetlistItemInput = forwardRef(
                         ? defaultValue.featuringArtist.name
                         : ''
                     }
+                    error={error.featuringArtist}
                   />
                 </Control>
               </Field>
@@ -157,6 +169,7 @@ SetlistItemInput.propTypes = {
   onRemove: PropTypes.func,
   defaultValue: PropTypes.object,
   index: PropTypes.number,
+  error: PropTypes.object,
 };
 
 export default memo(SetlistItemInput);

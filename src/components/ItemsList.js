@@ -10,7 +10,7 @@ import reorder from '../lib/reorder';
 
 const types = ['set', 'tape', 'track'];
 
-const ItemsList = ({ items, onChange, defaultValues, artistId }) => {
+const ItemsList = ({ items, onChange, defaultValues, artistId, errors }) => {
   const [_defaultValues, _setDefaultValues] = useState(
     arrToObj(defaultValues, 'id')
   );
@@ -57,6 +57,7 @@ const ItemsList = ({ items, onChange, defaultValues, artistId }) => {
                     <SetlistItemInput
                       index={index}
                       value={item}
+                      error={errors ? errors[index] : {}}
                       artistId={artistId}
                       onChange={updateItem}
                       onRemove={removeItem}
@@ -112,6 +113,7 @@ ItemsList.propTypes = {
   onChange: PropTypes.func,
   defaultValues: PropTypes.array,
   artistId: PropTypes.number,
+  errors: PropTypes.array,
 };
 
 export default ItemsList;

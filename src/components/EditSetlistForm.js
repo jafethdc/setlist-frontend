@@ -3,10 +3,41 @@ import PropTypes from 'prop-types';
 import { Button, Field, Control, Label, TextArea } from 'bloomer';
 import ItemsList from './ItemsList';
 
+const validateItem = value => {
+  const errors = {};
+
+  if (value.type === 'set' && !value.info) errors.info = 'Info is required';
+  if (['track', 'tape'].includes(value.type) && !value.track)
+    errors.track = 'Track is required';
+
+  return errors;
+};
+
+const validate = values => {
+  const errors = {};
+
+  const itemsErrors = values.items.map(validateItem);
+  if (itemsErrors.some(err => Object.keys(err).length))
+    errors.items = itemsErrors;
+
+  console.log('errors!', errors);
+  return errors;
+};
+
 const EditSetlistForm = ({ initialValues, onSubmit }) => {
   const [values, setValues] = useState(initialValues);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => setValues(initialValues), [initialValues]);
+
+  const handleClick = action => () => {
+    const { comment, items } = values;
+    const newErrors = validate({ comment, items });
+    setErrors(newErrors);
+    if (!Object.keys(newErrors).length) {
+      action(values);
+    }
+  };
 
   const updateItems = useCallback(
     setItems =>
@@ -24,6 +55,7 @@ const EditSetlistForm = ({ initialValues, onSubmit }) => {
         onChange={updateItems}
         defaultValues={initialValues.items}
         artistId={parseInt(initialValues.artist.id)}
+        errors={errors.items}
       />
 
       <Field>
@@ -39,7 +71,7 @@ const EditSetlistForm = ({ initialValues, onSubmit }) => {
 
       <Field>
         <Control>
-          <Button isColor="primary" onClick={() => onSubmit(values)}>
+          <Button isColor="primary" onClick={handleClick(onSubmit)}>
             Submit
           </Button>
         </Control>

@@ -38,6 +38,7 @@ const Autocomplete = ({
   optionLabel,
   placeholder,
   initialValue,
+  error,
 }) => {
   const [term, setTerm] = useState(initialValue);
   const [activeOption, setActiveOption] = useState(-1);
@@ -68,11 +69,10 @@ const Autocomplete = ({
   const handleChange = ({ target: { value } }) => {
     setTerm(value);
     if (value) {
-      onChange(value);
-
       clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => updateOptions(value), 750);
+      timerRef.current = setTimeout(() => updateOptions(value), 500);
     } else setOptions(null);
+    onChange(value);
   };
 
   const handleSelect = option => {
@@ -143,6 +143,7 @@ const Autocomplete = ({
           onBlur={() => setInputFocus(false)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
+          className={error ? 'is-danger' : ''}
         />
       </Control>
       {displayDropdown && (
@@ -159,6 +160,7 @@ Autocomplete.propTypes = {
   optionLabel: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
   placeholder: PropTypes.string,
   initialValue: PropTypes.string,
+  error: PropTypes.string,
 };
 
 Autocomplete.defaultProps = {
