@@ -20,11 +20,10 @@ const validate = values => {
   if (itemsErrors.some(err => Object.keys(err).length))
     errors.items = itemsErrors;
 
-  console.log('errors!', errors);
   return errors;
 };
 
-const EditSetlistForm = ({ initialValues, onSubmit }) => {
+const EditSetlistForm = ({ initialValues, onSubmit, loading }) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
 
@@ -71,7 +70,11 @@ const EditSetlistForm = ({ initialValues, onSubmit }) => {
 
       <Field>
         <Control>
-          <Button isColor="primary" onClick={handleClick(onSubmit)}>
+          <Button
+            isColor="primary"
+            disabled={loading}
+            onClick={handleClick(onSubmit)}
+          >
             Submit
           </Button>
         </Control>
@@ -83,6 +86,7 @@ const EditSetlistForm = ({ initialValues, onSubmit }) => {
 EditSetlistForm.propTypes = {
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 export default EditSetlistForm;

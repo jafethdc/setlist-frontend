@@ -5,10 +5,11 @@ import { Title, Subtitle } from 'bloomer';
 import Layout from '../components/Layout';
 import useQuery from '../custom-hooks/useCustomQuery';
 import EditSetlistForm from '../components/EditSetlistForm';
+import Mutation from '../components/graphql/CustomMutation';
 
-const GET_SETLIST_QUERY = gql`
-  query GET_SETLIST_QUERY($id: Int) {
-    setlist(where: { id: $id }) {
+const fragments = {
+  SetlistFields: gql`
+    fragment SetlistFields on Setlist {
       id
       date
       artist {
@@ -45,7 +46,32 @@ const GET_SETLIST_QUERY = gql`
         isCover
       }
     }
+  `,
+};
+
+const EDIT_SETLIST_MUTATION = gql`
+  mutation EDIT_SETLIST_MUTATION(
+    $id: ID!
+    $items: [SetlistItemInput!]!
+    $comment: String
+  ) {
+    editSetlist(input: { id: $id, items: $items, comment: $comment }) {
+      errors
+      setlist {
+        ...SetlistFields
+      }
+    }
   }
+  ${fragments.SetlistFields}
+`;
+
+const GET_SETLIST_QUERY = gql`
+  query GET_SETLIST_QUERY($id: Int) {
+    setlist(where: { id: $id }) {
+      ...SetlistFields
+    }
+  }
+  ${fragments.SetlistFields}
 `;
 
 const EditSetlist = ({ match }) => {
@@ -58,6 +84,35 @@ const EditSetlist = ({ match }) => {
     },
   });
 
+  const handleSubmit = editSetlist => async ({ id, items, comment }) => {
+    const {
+      data: {
+        editSetlist: { errors },
+      },
+    } = await editSetlist({
+      variables: {
+        id,
+        comment,
+        items: items.map(
+          (
+            { type, info, isCover, track, featuringArtist, ...restItem },
+            index
+          ) => ({
+            id: restItem.id,
+            trackId: track ? track.id : null,
+            featuringArtistId: featuringArtist ? featuringArtist.id : null,
+            position: index + 1,
+            type,
+            info,
+            isCover,
+          })
+        ),
+      },
+    });
+
+    console.log('edition submit errors!', errors);
+  };
+
   return (
     <Layout>
       {loading ? (
@@ -68,10 +123,15 @@ const EditSetlist = ({ match }) => {
           <Subtitle isSize={4}>{`${setlist.venue.name}, ${
             setlist.venue.city.name
           }, ${setlist.venue.city.country.name}`}</Subtitle>
-          <EditSetlistForm
-            initialValues={setlist}
-            onSubmit={values => console.log('submit edit setlist', values)}
-          />
+          <Mutation mutation={EDIT_SETLIST_MUTATION}>
+            {(editSetlist, { loading: submitting }) => (
+              <EditSetlistForm
+                initialValues={setlist}
+                onSubmit={handleSubmit(editSetlist)}
+                loading={submitting}
+              />
+            )}
+          </Mutation>
         </>
       )}
     </Layout>
