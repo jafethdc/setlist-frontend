@@ -15,10 +15,9 @@ const TOP_ARTISTS_BY_SETLISTS_QUERY = gql`
 `;
 
 const PopularArtists = () => {
-  const first = 10;
   const { data, loading } = useQuery(TOP_ARTISTS_BY_SETLISTS_QUERY, {
     variables: {
-      first,
+      first: 10,
       orderBy: {
         field: 'SETLISTS_COUNT',
         direction: 'DESC',
@@ -30,8 +29,8 @@ const PopularArtists = () => {
 
   return (
     <div className="list">
-      {data.artists.nodes.map((artist, i) => (
-        <div className="list-item" key={i}>
+      {data.artists.nodes.map(artist => (
+        <div className="list-item" key={artist.id}>
           {artist.name} - {artist.setlistsCount} setlists
         </div>
       ))}

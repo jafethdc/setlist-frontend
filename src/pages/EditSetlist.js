@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import { Title, Subtitle } from 'bloomer';
+import Form from '../components/EditSetlistForm';
 import Layout from '../components/Layout';
-import useQuery from '../custom-hooks/useCustomQuery';
-import EditSetlistForm from '../components/EditSetlistForm';
-import Mutation from '../components/graphql/CustomMutation';
 import Setlist from '../components/Setlist';
+import Mutation from '../components/graphql/CustomMutation';
+import useQuery from '../custom-hooks/useCustomQuery';
 
 const fragments = {
   SetlistFields: gql`
@@ -75,24 +75,24 @@ const GET_SETLIST_QUERY = gql`
   ${fragments.SetlistFields}
 `;
 
-const EditSetlist = ({ match }) => {
+const EditSetlist = ({ match: routeMatch }) => {
   const {
     data: { setlist },
-    loading,
+    loading: fetchingSetlist,
   } = useQuery(GET_SETLIST_QUERY, {
     variables: {
-      id: parseInt(match.params.id),
+      id: parseInt(routeMatch.params.id),
     },
   });
 
   const [setlistPreview, setSetlistPreview] = useState(null);
 
-  const handleSubmit = editSetlist => async ({ id, items, comment }) => {
+  const updateSetlist = mutation => async ({ id, items, comment }) => {
     const {
       data: {
         editSetlist: { errors },
       },
-    } = await editSetlist({
+    } = await mutation({
       variables: {
         id,
         comment,
@@ -113,12 +113,12 @@ const EditSetlist = ({ match }) => {
       },
     });
 
-    console.log('edition submit errors!', errors);
+    console.log('edition updateSetlist errors!', errors);
   };
 
   return (
     <Layout>
-      {loading ? (
+      {fetchingSetlist ? (
         <p>Loading...</p>
       ) : (
         <>
@@ -127,12 +127,12 @@ const EditSetlist = ({ match }) => {
             setlist.venue.city.name
           }, ${setlist.venue.city.country.name}`}</Subtitle>
           <Mutation mutation={EDIT_SETLIST_MUTATION}>
-            {(editSetlist, { loading: submitting }) => (
-              <EditSetlistForm
+            {(mutation, { loading: updatingSetlist }) => (
+              <Form
                 initialValues={setlist}
-                onSubmit={handleSubmit(editSetlist)}
+                onSubmit={updateSetlist(mutation)}
                 onPreview={setSetlistPreview}
-                loading={submitting}
+                loading={updatingSetlist}
               />
             )}
           </Mutation>

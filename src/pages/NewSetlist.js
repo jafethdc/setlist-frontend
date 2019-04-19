@@ -34,7 +34,7 @@ const NewSetlist = () => {
   const [submitErrors, setSubmitErrors] = useState([]);
   const [setlistPreview, setSetlistPreview] = useState(null);
 
-  const handleSubmit = createSetlist => async ({
+  const createSetlist = mutation => async ({
     artist,
     venue,
     date,
@@ -44,7 +44,7 @@ const NewSetlist = () => {
       data: {
         createSetlist: { errors, setlist },
       },
-    } = await createSetlist({
+    } = await mutation({
       variables: {
         artistId: parseInt(artist.id),
         venueId: parseInt(venue.id),
@@ -63,11 +63,11 @@ const NewSetlist = () => {
       <Columns>
         <Column isSize="1/2">
           <Mutation mutation={CREATE_SETLIST_MUTATION}>
-            {(createSetlist, { loading }) => (
+            {(mutation, { loading: creatingSetlist }) => (
               <NewSetlistForm
-                onSubmit={handleSubmit(createSetlist)}
+                onSubmit={createSetlist(mutation)}
                 onPreview={setSetlistPreview}
-                loading={loading}
+                loading={creatingSetlist}
                 errors={submitErrors}
               />
             )}

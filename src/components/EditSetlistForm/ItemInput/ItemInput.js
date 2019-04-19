@@ -12,9 +12,8 @@ import {
   Input,
   Tag,
 } from 'bloomer';
-import ArtistAutocomplete from './ArtistAutocomplete';
-import TrackAutocomplete from './TrackAutocomplete';
-import BasicDropdown from './BasicDropdown';
+import { ArtistAutocomplete, TrackAutocomplete } from '../../autocompletes';
+import BasicDropdown from '../../BasicDropdown';
 
 const SetlistItemInput = forwardRef(
   (
@@ -33,7 +32,7 @@ const SetlistItemInput = forwardRef(
     const handleChange = change => onChange(index, { ...value, ...change });
 
     return (
-      <div className="field setlist-item" ref={ref} {...rest}>
+      <div className="field setlist-item-input" ref={ref} {...rest}>
         <Columns>
           <Column isSize={1}>
             <Tag isColor="light">{value.type}</Tag>
@@ -113,7 +112,7 @@ const SetlistItemInput = forwardRef(
                     </Button>
                   }
                 >
-                  {({ setDropdownActive }) => (
+                  {({ setActive }) => (
                     <>
                       {value.type !== 'set' && (
                         <DropdownItem>
@@ -137,7 +136,7 @@ const SetlistItemInput = forwardRef(
                         className="hoverable"
                         onClick={() => {
                           onRemove(index);
-                          setDropdownActive(false);
+                          setActive(false);
                         }}
                       >
                         Delete

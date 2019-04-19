@@ -2,26 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Field, Control, Label, TextArea } from 'bloomer';
 import ItemsList from './ItemsList';
-
-const validateItem = value => {
-  const errors = {};
-
-  if (value.type === 'set' && !value.info) errors.info = 'Info is required';
-  if (['track', 'tape'].includes(value.type) && !value.track)
-    errors.track = 'Track is required';
-
-  return errors;
-};
-
-const validate = values => {
-  const errors = {};
-
-  const itemsErrors = values.items.map(validateItem);
-  if (itemsErrors.some(err => Object.keys(err).length))
-    errors.items = itemsErrors;
-
-  return errors;
-};
+import validateSetlist from './validateSetlist';
 
 const EditSetlistForm = ({ initialValues, onSubmit, onPreview, loading }) => {
   const [values, setValues] = useState(initialValues);
@@ -31,7 +12,7 @@ const EditSetlistForm = ({ initialValues, onSubmit, onPreview, loading }) => {
 
   const handleClick = action => () => {
     const { comment, items } = values;
-    const newErrors = validate({ comment, items });
+    const newErrors = validateSetlist({ comment, items });
     setErrors(newErrors);
     if (!Object.keys(newErrors).length) {
       action(values);

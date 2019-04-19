@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Field, Label, Control, Input, Button, TextArea, Help } from 'bloomer';
 import PropTypes from 'prop-types';
-import ArtistAutocomplete from './ArtistAutocomplete';
-import VenueAutocomplete from './VenueAutocomplete';
+import { ArtistAutocomplete, VenueAutocomplete } from './autocompletes';
 import FormErrors from './FormErrors';
 
 const validate = values => {

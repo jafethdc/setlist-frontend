@@ -1,0 +1,15 @@
+.setlist-item-input {
+    .columns {
+        margin-top: 0;
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .column {
+            padding: 0.30rem;
+        }
+    }
+    &.field:not(:last-child) {
+        margin-bottom: 0;
+    }
+}

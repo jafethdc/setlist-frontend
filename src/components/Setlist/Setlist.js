@@ -45,7 +45,7 @@ const Setlist = ({ setlist: { date, artist, venue, items } }) => {
           <CardHeaderTitle>Setlist</CardHeaderTitle>
         </CardHeader>
         <CardContent>
-          {items.length ? (
+          {items && items.length ? (
             items.map(item => (
               <SetlistItem key={item.id || item._id} item={item} />
             ))

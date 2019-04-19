@@ -3,10 +3,10 @@ import uuid from 'uuid/v1';
 import PropTypes from 'prop-types';
 import { Button, Control, DropdownItem, Field, Icon } from 'bloomer';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import BasicDropdown from './BasicDropdown';
-import SetlistItemInput from './SetlistItemInput';
-import arrToObj from '../lib/arrToObj';
-import reorder from '../lib/reorder';
+import BasicDropdown from '../BasicDropdown';
+import ItemInput from './ItemInput';
+import arrToObj from '../../lib/arrToObj';
+import reorder from '../../lib/reorder';
 
 const types = ['set', 'tape', 'track'];
 
@@ -54,7 +54,7 @@ const ItemsList = ({ items, onChange, defaultValues, artistId, errors }) => {
                   index={index}
                 >
                   {draggableProvided => (
-                    <SetlistItemInput
+                    <ItemInput
                       index={index}
                       value={item}
                       error={errors ? errors[index] : {}}
@@ -85,7 +85,7 @@ const ItemsList = ({ items, onChange, defaultValues, artistId, errors }) => {
               </Button>
             }
           >
-            {({ setDropdownActive }) => (
+            {({ setActive }) => (
               <>
                 {types.map(type => (
                   <DropdownItem
@@ -93,7 +93,7 @@ const ItemsList = ({ items, onChange, defaultValues, artistId, errors }) => {
                     className="hoverable"
                     onClick={() => {
                       addItem(type);
-                      setDropdownActive(false);
+                      setActive(false);
                     }}
                   >
                     {type}

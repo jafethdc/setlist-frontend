@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import gql from 'graphql-tag';
-import Mutation from '../components/graphql/CustomMutation';
 import Layout from '../components/Layout';
-import SignInForm from '../components/SignInForm';
+import Form from '../components/SignInForm';
+import Mutation from '../components/graphql/CustomMutation';
 import { ME_QUERY } from '../custom-hooks/useCurrentUser';
 
 export const SIGN_IN_MUTATION = gql`
@@ -21,12 +21,12 @@ export const SIGN_IN_MUTATION = gql`
 const SignIn = () => {
   const [submitErrors, setSubmitErrors] = useState([]);
 
-  const handleSubmit = signIn => async ({ email, password }) => {
+  const signIn = mutation => async ({ email, password }) => {
     const {
       data: {
         signIn: { errors, user },
       },
-    } = await signIn({
+    } = await mutation({
       variables: { email, password },
     });
 
@@ -45,10 +45,10 @@ const SignIn = () => {
           data.signIn.errors.length ? [] : [{ query: ME_QUERY }]
         }
       >
-        {(signIn, { loading }) => (
-          <SignInForm
-            onSubmit={handleSubmit(signIn)}
-            loading={loading}
+        {(mutation, { loading: signinIn }) => (
+          <Form
+            onSubmit={signIn(mutation)}
+            loading={signinIn}
             errors={submitErrors}
           />
         )}

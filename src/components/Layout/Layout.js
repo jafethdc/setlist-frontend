@@ -3,9 +3,9 @@ import { Container, Section } from 'bloomer';
 import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import GraphqlErrorBoundary from './graphql/GraphqlErrorBoundary';
+import GraphqlErrorBoundary from '../graphql/GraphqlErrorBoundary';
 
-const Main = ({ children }) => (
+const Layout = ({ children }) => (
   <>
     <Navbar />
     <Section>
@@ -17,8 +17,8 @@ const Main = ({ children }) => (
   </>
 );
 
-Main.propTypes = {
+Layout.propTypes = {
   children: PropTypes.any.isRequired,
 };
 
-export default Main;
+export default Layout;

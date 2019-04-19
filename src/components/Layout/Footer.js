@@ -6,9 +6,13 @@ import moment from 'moment';
 
 const AlphabetIndex = ({ itemUrl }) => (
   <Subtitle isSize={6}>
-    {'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('').map(i => (
-      <Link to={itemUrl(i)} className="alph-list-item" key={i}>
-        {i}
+    {'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('').map(char => (
+      <Link
+        to={itemUrl(char)}
+        style={{ paddingLeft: 2, paddingRight: 2 }}
+        key={char}
+      >
+        {char}
       </Link>
     ))}
   </Subtitle>

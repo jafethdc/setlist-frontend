@@ -1,12 +1,8 @@
-@import '../node_modules/bulma/bulma.sass';
+@import '~bulma/bulma.sass';
 @import './divider.sass';
-@import './components/Autocomplete.scss';
-@import './components/Setlist.scss';
-
-.alph-list-item {
-    padding-left: 2px;
-    padding-right: 2px;
-}
+@import './components/autocompletes/Autocomplete/Autocomplete.scss';
+@import './components/Setlist/Setlist.scss';
+@import './components/EditSetlistForm/ItemInput/ItemInput.scss';
 
 .unstyled-list {
     padding-left: 0;
@@ -18,21 +14,5 @@
     &:hover {
         background-color: whitesmoke;
         color: #0a0a0a;
-    }
-}
-
-.setlist-item {
-    .columns {
-        margin-top: 0;
-        &:last-child {
-            margin-bottom: 0;
-        }
-
-        .column {
-            padding: 0.30rem;
-        }
-    }
-    &.field:not(:last-child) {
-        margin-bottom: 0;
     }
 }

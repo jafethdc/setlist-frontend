@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import gql from 'graphql-tag';
-import Mutation from '../components/graphql/CustomMutation';
 import Layout from '../components/Layout';
 import SignUpForm from '../components/SignUpForm';
+import Mutation from '../components/graphql/CustomMutation';
 import { SIGN_IN_MUTATION } from './SignIn';
 import { ME_QUERY } from '../custom-hooks/useCurrentUser';
 
@@ -37,7 +37,7 @@ const SIGN_UP_MUTATION = gql`
 const SignUp = () => {
   const [submitErrors, setSubmitErrors] = useState([]);
 
-  const handleSubmit = (signUpMutation, signInMutation) => async ({
+  const signUp = (signUpMutation, signInMutation) => async ({
     name,
     username,
     email,
@@ -45,7 +45,9 @@ const SignUp = () => {
     passwordConfirmation,
   }) => {
     const {
-      data: { signUp },
+      data: {
+        signUp: { errors: signUpErrors },
+      },
     } = await signUpMutation({
       variables: {
         name,
@@ -56,33 +58,35 @@ const SignUp = () => {
       },
     });
 
-    setSubmitErrors(signUp.errors);
+    setSubmitErrors(signUpErrors);
 
-    if (!signUp.errors.length) {
+    if (!signUpErrors.length) {
       const {
-        data: { signIn },
+        data: {
+          signIn: { errors: signInErrors },
+        },
       } = await signInMutation({
         variables: { email, password },
       });
 
-      setSubmitErrors(signIn.errors);
+      setSubmitErrors(signInErrors);
     }
   };
 
   return (
     <Layout>
       <Mutation mutation={SIGN_UP_MUTATION}>
-        {(signUp, { loading: signUpLoading }) => (
+        {(signUpMutation, { loading: signinUp }) => (
           <Mutation
             mutation={SIGN_IN_MUTATION}
             refetchQueries={({ data }) =>
               data.signIn.errors.length ? [] : [{ query: ME_QUERY }]
             }
           >
-            {(signIn, { loading: signInLoading }) => (
+            {(signInMutation, { loading: signinIn }) => (
               <SignUpForm
-                onSubmit={handleSubmit(signUp, signIn)}
-                loading={signUpLoading || signInLoading}
+                onSubmit={signUp(signUpMutation, signInMutation)}
+                loading={signinUp || signinIn}
                 errors={submitErrors}
               />
             )}

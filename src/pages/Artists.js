@@ -1,8 +1,8 @@
 import React from 'react';
 import { Columns, Column } from 'bloomer';
+import ArtistsBySetlists from '../components/ArtistsBySetlists';
 import Layout from '../components/Layout';
 import PopularArtists from '../components/PopularArtists';
-import ArtistsBySetlists from '../components/ArtistsBySetlists';
 
 const Artists = () => (
   <Layout>

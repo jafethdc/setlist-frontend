@@ -4,23 +4,18 @@ import PropTypes from 'prop-types';
 import useOnClickOutside from '../custom-hooks/useOnClickOutside';
 
 const BasicDropdown = ({ children, trigger }) => {
-  const [dropdownActive, setDropdownActive] = useState(false);
-  const dropdownRef = useRef(null);
+  const [active, setActive] = useState(false);
+  const ref = useRef(null);
 
-  useOnClickOutside(dropdownRef, () => setDropdownActive(false));
+  useOnClickOutside(ref, () => setActive(false));
 
   return (
-    <div
-      ref={dropdownRef}
-      className={`dropdown ${dropdownActive ? 'is-active' : ''}`}
-    >
-      <DropdownTrigger onClick={() => setDropdownActive(active => !active)}>
+    <div ref={ref} className={`dropdown ${active ? 'is-active' : ''}`}>
+      <DropdownTrigger onClick={() => setActive(!active)}>
         {trigger}
       </DropdownTrigger>
       <DropdownMenu>
-        <DropdownContent>
-          {children({ dropdownActive, setDropdownActive })}
-        </DropdownContent>
+        <DropdownContent>{children({ active, setActive })}</DropdownContent>
       </DropdownMenu>
     </div>
   );
