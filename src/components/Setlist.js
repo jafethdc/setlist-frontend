@@ -14,8 +14,9 @@ import {
   CardContent,
   CardFooter,
 } from 'bloomer';
+import SetlistItem from './SetlistItem';
 
-const Setlist = ({ setlist: { date, artist, venue } }) => {
+const Setlist = ({ setlist: { date, artist, venue, items } }) => {
   const mDate = moment(date, 'YYYY-MM-DD');
   return (
     <div>
@@ -44,9 +45,17 @@ const Setlist = ({ setlist: { date, artist, venue } }) => {
           <CardHeaderTitle>Setlist</CardHeaderTitle>
         </CardHeader>
         <CardContent>
-          Sorry, there are no songs in this setlist yet, but ... If you were
-          there then add whatever song you remember! And you might also get help
-          in the setlist request forum
+          {items.length ? (
+            items.map(item => (
+              <SetlistItem key={item.id || item._id} item={item} />
+            ))
+          ) : (
+            <p>
+              Sorry, there are no songs in this setlist yet, but ... If you were
+              there then add whatever song you remember! And you might also get
+              help in the setlist request forum
+            </p>
+          )}
         </CardContent>
         <CardFooter className="setlist-footer">
           <Button isColor="primary">I was there</Button>

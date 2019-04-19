@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import { Title, Subtitle } from 'bloomer';
@@ -6,6 +6,7 @@ import Layout from '../components/Layout';
 import useQuery from '../custom-hooks/useCustomQuery';
 import EditSetlistForm from '../components/EditSetlistForm';
 import Mutation from '../components/graphql/CustomMutation';
+import Setlist from '../components/Setlist';
 
 const fragments = {
   SetlistFields: gql`
@@ -84,6 +85,8 @@ const EditSetlist = ({ match }) => {
     },
   });
 
+  const [setlistPreview, setSetlistPreview] = useState(null);
+
   const handleSubmit = editSetlist => async ({ id, items, comment }) => {
     const {
       data: {
@@ -128,10 +131,13 @@ const EditSetlist = ({ match }) => {
               <EditSetlistForm
                 initialValues={setlist}
                 onSubmit={handleSubmit(editSetlist)}
+                onPreview={setSetlistPreview}
                 loading={submitting}
               />
             )}
           </Mutation>
+
+          {setlistPreview && <Setlist setlist={setlistPreview} />}
         </>
       )}
     </Layout>
