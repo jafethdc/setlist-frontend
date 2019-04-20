@@ -1,0 +1,26 @@
+.setlist-item {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    .setlist-item-title {
+        display: inline;
+        font-weight: bold;
+        color: $black;
+    }
+
+    .setlist-item-subtitle {
+        font-size: 11px;
+    }
+
+    &.setlist-set {
+        margin-top: 35px;
+        .setlist-item-title {
+            background-color: #cfe3fd;
+        }
+    }
+
+    &.setlist-tape {
+        .setlist-item-title {
+            color: $grey;
+        }
+    }
+}

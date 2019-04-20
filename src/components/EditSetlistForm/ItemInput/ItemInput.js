@@ -119,7 +119,7 @@ const SetlistItemInput = forwardRef(
                           <Field>
                             <Control>
                               <Checkbox
-                                checked={value.isCover}
+                                checked={value.isCover || false}
                                 onChange={e =>
                                   handleChange({
                                     isCover: e.target.checked,
@@ -169,6 +169,10 @@ SetlistItemInput.propTypes = {
   defaultValue: PropTypes.object,
   index: PropTypes.number,
   error: PropTypes.object,
+};
+
+SetlistItemInput.defaultProps = {
+  error: {},
 };
 
 export default memo(SetlistItemInput);

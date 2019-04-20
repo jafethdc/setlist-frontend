@@ -18,6 +18,7 @@ const fragments = {
         name
       }
       venue {
+        id
         name
         city {
           name
@@ -30,6 +31,7 @@ const fragments = {
         id
         type
         featuringArtist {
+          id
           name
         }
         track {
@@ -38,6 +40,7 @@ const fragments = {
             release {
               name
               artist {
+                id
                 name
               }
             }

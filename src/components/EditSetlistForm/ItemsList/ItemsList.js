@@ -57,7 +57,7 @@ const ItemsList = ({ items, onChange, defaultValues, artistId, errors }) => {
                     <ItemInput
                       index={index}
                       value={item}
-                      error={errors ? errors[index] : {}}
+                      error={errors ? errors[index] : undefined}
                       artistId={artistId}
                       onChange={updateItem}
                       onRemove={removeItem}
