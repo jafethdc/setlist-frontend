@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { useMutation } from 'react-apollo-hooks';
 import { Button } from 'bloomer';
-import { ME_QUERY } from '../custom-hooks/useCurrentUser';
+import { ME_QUERY } from '../../custom-hooks/useCurrentUser';
 
 const SIGN_OUT_MUTATION = gql`
   mutation SIGN_OUT_MUTATION {

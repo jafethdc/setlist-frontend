@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { useApolloClient } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
-import Autocomplete from './Autocomplete';
+import Autocomplete from '../Autocomplete';
 
 const FILTER_TRACKS_QUERY = gql`
   query FILTER_TRACKS_QUERY($where: TrackWhere, $first: Int) {

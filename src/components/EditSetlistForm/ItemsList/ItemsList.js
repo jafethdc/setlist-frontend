@@ -3,10 +3,10 @@ import uuid from 'uuid/v1';
 import PropTypes from 'prop-types';
 import { Button, Control, DropdownItem, Field, Icon } from 'bloomer';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import BasicDropdown from '../BasicDropdown';
-import ItemInput from './ItemInput';
-import arrToObj from '../../lib/arrToObj';
-import reorder from '../../lib/reorder';
+import BasicDropdown from '../../BasicDropdown';
+import ItemInput from '../ItemInput';
+import arrToObj from '../../../lib/arrToObj';
+import reorder from '../../../lib/reorder';
 
 const types = ['set', 'tape', 'track'];
 

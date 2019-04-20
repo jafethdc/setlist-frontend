@@ -1,7 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { useApolloClient } from 'react-apollo-hooks';
-import Autocomplete from './Autocomplete';
+import Autocomplete from '../Autocomplete';
 
 const FILTER_ARTISTS_QUERY = gql`
   query FILTER_ARTISTS_QUERY($where: ArtistWhere, $first: Int) {

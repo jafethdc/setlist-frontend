@@ -12,8 +12,8 @@ import {
   Button,
   Container,
 } from 'bloomer';
-import useCurrentUser from '../../custom-hooks/useCurrentUser';
-import SignOutButton from '../SignOutButton';
+import useCurrentUser from '../../../custom-hooks/useCurrentUser';
+import SignOutButton from '../../SignOutButton';
 
 const menuItems = [
   { name: 'Setlists', to: '/setlists' },

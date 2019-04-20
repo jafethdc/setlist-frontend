@@ -1,11 +1,13 @@
 import React from 'react';
 import { Field, Label, Control, Input, Icon, Button, Help } from 'bloomer';
 import PropTypes from 'prop-types';
-import useFormState from '../custom-hooks/useFormState';
-import FormErrors from './FormErrors';
+import useFormState from '../../custom-hooks/useFormState';
+import FormErrors from '../FormErrors';
 
 const validate = values => {
   const errors = {};
+  if (!values.name) errors.name = 'Name is required';
+  if (!values.username) errors.username = 'Username is required';
   if (!values.email) {
     errors.email = 'Email is required';
   } else if (!/(.+)@(.+){2,}\.(.+){2,}/.test(values.email)) {
@@ -13,10 +15,14 @@ const validate = values => {
   }
 
   if (!values.password) errors.password = 'Password is required';
+
+  if (values.password !== values.passwordConfirmation) {
+    errors.passwordConfirmation = "Confirmation doesn't match the password";
+  }
   return errors;
 };
 
-const SignInForm = ({
+const SignUpForm = ({
   onSubmit,
   initialValues,
   loading,
@@ -24,11 +30,41 @@ const SignInForm = ({
 }) => {
   const [{ values, touched, errors }, { text, password }] = useFormState(
     initialValues,
-    { validate }
+    {
+      validate,
+    }
   );
 
   return (
     <form autoComplete="off">
+      <Field>
+        <Label>Name</Label>
+        <Control>
+          <Input
+            {...text('name')}
+            isColor={touched.name && errors.name ? 'danger' : ''}
+          />
+        </Control>
+        {touched.name && errors.name && (
+          <Help isColor="danger">{errors.name}</Help>
+        )}
+      </Field>
+
+      <Field>
+        <Label>Username</Label>
+        <Control className="has-icons-left">
+          <Input
+            {...text('username')}
+            isColor={touched.username && errors.username ? 'danger' : ''}
+            autoComplete="new-password"
+          />
+          <Icon className="fa fa-user" isSize="small" isAlign="left" />
+        </Control>
+        {touched.username && errors.username && (
+          <Help isColor="danger">{errors.username}</Help>
+        )}
+      </Field>
+
       <Field>
         <Label>Email</Label>
         <Control className="has-icons-left">
@@ -58,6 +94,23 @@ const SignInForm = ({
         )}
       </Field>
 
+      <Field>
+        <Label>Password confirmation</Label>
+        <Control>
+          <Input
+            {...password('passwordConfirmation')}
+            isColor={
+              touched.passwordConfirmation && errors.passwordConfirmation
+                ? 'danger'
+                : ''
+            }
+          />
+        </Control>
+        {touched.passwordConfirmation && errors.passwordConfirmation && (
+          <Help isColor="danger">{errors.passwordConfirmation}</Help>
+        )}
+      </Field>
+
       {submitErrors && submitErrors.length > 0 && (
         <FormErrors errors={submitErrors} />
       )}
@@ -74,11 +127,11 @@ const SignInForm = ({
   );
 };
 
-SignInForm.propTypes = {
+SignUpForm.propTypes = {
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   errors: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default SignInForm;
+export default SignUpForm;

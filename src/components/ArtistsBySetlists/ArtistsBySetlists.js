@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import useQuery from '../custom-hooks/useCustomQuery';
+import useQuery from '../../custom-hooks/useCustomQuery';
 
 const TOP_ARTISTS_BY_SETLISTS_QUERY = gql`
   query TOP_ARTISTS_BY_SETLISTS_QUERY($first: Int, $orderBy: ArtistOrder) {

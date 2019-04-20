@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { DropdownTrigger, DropdownContent, DropdownMenu } from 'bloomer';
 import PropTypes from 'prop-types';
-import useOnClickOutside from '../custom-hooks/useOnClickOutside';
+import useOnClickOutside from '../../custom-hooks/useOnClickOutside';
 
 const BasicDropdown = ({ children, trigger }) => {
   const [active, setActive] = useState(false);

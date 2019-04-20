@@ -12,7 +12,7 @@ import {
   Input,
   Tag,
 } from 'bloomer';
-import { ArtistAutocomplete, TrackAutocomplete } from '../../autocompletes';
+import { ArtistAutocomplete, TrackAutocomplete } from '../../Autocomplete';
 import BasicDropdown from '../../BasicDropdown';
 
 const SetlistItemInput = forwardRef(
