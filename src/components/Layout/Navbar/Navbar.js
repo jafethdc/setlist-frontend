@@ -1,9 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withRouter, matchPath } from 'react-router';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Navbar,
   NavbarEnd,
@@ -11,9 +7,13 @@ import {
   NavbarStart,
   Button,
   Container,
+  DropdownItem,
+  Icon,
 } from 'bloomer';
 import useCurrentUser from '../../../custom-hooks/useCurrentUser';
-import SignOutButton from '../../SignOutButton';
+import BasicDropdown from '../../BasicDropdown';
+import { useSignOut } from '../../SignOutButton/SignOutButton';
+import SetlistSearch from '../SetlistSearch';
 
 const menuItems = [
   { name: 'Setlists', to: '/setlists' },
@@ -23,69 +23,68 @@ const menuItems = [
   { name: 'Statistics', to: '/statistics' },
 ];
 
-const MainNavbar = ({ location }) => {
+const MainNavbar = () => {
   const currentUser = useCurrentUser();
+  const signOut = useSignOut();
 
   return (
     <Navbar isTransparent>
       <Container>
         <NavbarStart>
           {menuItems.map((menuItem, index) => (
-            <NavbarItem
+            <NavLink
               key={index}
-              isActive={matchPath(location.pathname, {
-                path: menuItem.to,
-                exact: true,
-              })}
-              render={props => (
-                <Link to={menuItem.to} {...props}>
-                  {menuItem.name}
-                </Link>
-              )}
-            />
+              to={menuItem.to}
+              activeClassName="is-active"
+              className="navbar-item"
+              exact
+            >
+              {menuItem.name}
+            </NavLink>
           ))}
         </NavbarStart>
         <NavbarEnd>
           <NavbarItem>
+            <SetlistSearch
+              onSubmit={query => console.log('setlist search query', query)}
+            />
+          </NavbarItem>
+
+          <NavbarItem>
             <div className="buttons">
               {currentUser ? (
                 <>
-                  <Button
-                    isColor="primary"
-                    render={props => (
-                      <Link to="/setlists/new" {...props}>
-                        <strong>Add Setlist</strong>
-                      </Link>
+                  <NavLink to="/setlists/new" className="button is-primary">
+                    <strong>Add Setlist</strong>
+                  </NavLink>
+                  <BasicDropdown
+                    trigger={
+                      <Button isOutlined>
+                        {currentUser.username}&nbsp;
+                        <Icon className="fa fa-angle-down" isSize="small" />
+                      </Button>
+                    }
+                  >
+                    {() => (
+                      <>
+                        <NavLink to="/profile" className="dropdown-item">
+                          Profile
+                        </NavLink>
+                        <DropdownItem className="hoverable" onClick={signOut}>
+                          Sign out
+                        </DropdownItem>
+                      </>
                     )}
-                  />
-                  <Button
-                    isColor="light"
-                    render={props => (
-                      <Link to="/profile" {...props}>
-                        Profile
-                      </Link>
-                    )}
-                  />
-                  <SignOutButton />
+                  </BasicDropdown>
                 </>
               ) : (
                 <>
-                  <Button
-                    isColor="primary"
-                    render={props => (
-                      <Link to="/signup" {...props}>
-                        <strong>Sign Up</strong>
-                      </Link>
-                    )}
-                  />
-                  <Button
-                    isColor="light"
-                    render={props => (
-                      <Link to="/signin" {...props}>
-                        Log In
-                      </Link>
-                    )}
-                  />
+                  <NavLink to="/signup" className="button is-primary">
+                    <strong>Sign Up</strong>
+                  </NavLink>
+                  <NavLink to="/signin" className="button is-light">
+                    Log In
+                  </NavLink>
                 </>
               )}
             </div>
@@ -96,8 +95,4 @@ const MainNavbar = ({ location }) => {
   );
 };
 
-MainNavbar.propTypes = {
-  location: PropTypes.object.isRequired,
-};
-
-export default withRouter(MainNavbar);
+export default MainNavbar;

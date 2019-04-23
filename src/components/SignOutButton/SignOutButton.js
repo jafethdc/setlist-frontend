@@ -12,13 +12,16 @@ const SIGN_OUT_MUTATION = gql`
   }
 `;
 
-const SignOutButton = () => {
-  const signOut = useMutation(SIGN_OUT_MUTATION, {
+export const useSignOut = () =>
+  useMutation(SIGN_OUT_MUTATION, {
     refetchQueries: [{ query: ME_QUERY }],
   });
 
+const SignOutButton = props => {
+  const signOut = useSignOut();
+
   return (
-    <Button isColor="light" onClick={signOut}>
+    <Button isColor="light" onClick={signOut} {...props}>
       Sign out
     </Button>
   );
