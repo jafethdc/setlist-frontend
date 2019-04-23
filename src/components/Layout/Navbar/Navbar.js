@@ -1,5 +1,10 @@
-import React from 'react';
+/* eslint-disable import/no-extraneous-dependencies */
+
+import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
+import queryString from 'query-string';
 import { NavLink } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import {
   Navbar,
   NavbarEnd,
@@ -23,9 +28,20 @@ const menuItems = [
   { name: 'Statistics', to: '/statistics' },
 ];
 
-const MainNavbar = () => {
+const MainNavbar = ({ history, location }) => {
   const currentUser = useCurrentUser();
   const signOut = useSignOut();
+  const queryParams = useMemo(() => queryString.parse(location.search), [
+    location.search,
+  ]);
+
+  const handleSearch = query => {
+    if (!query) return;
+    history.push({
+      pathname: '/search',
+      search: `?${queryString.stringify({ query })}`,
+    });
+  };
 
   return (
     <Navbar isTransparent>
@@ -46,7 +62,8 @@ const MainNavbar = () => {
         <NavbarEnd>
           <NavbarItem>
             <SetlistSearch
-              onSubmit={query => console.log('setlist search query', query)}
+              initialValue={queryParams.query || ''}
+              onSubmit={handleSearch}
             />
           </NavbarItem>
 
@@ -95,4 +112,9 @@ const MainNavbar = () => {
   );
 };
 
-export default MainNavbar;
+MainNavbar.propTypes = {
+  history: PropTypes.object,
+  location: PropTypes.object,
+};
+
+export default withRouter(MainNavbar);

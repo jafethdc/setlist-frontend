@@ -12,6 +12,7 @@
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
     "prop-types": "^15.7.2",
+    "query-string": "^6.4.2",
     "react": "^16.8.4",
     "react-apollo": "^2.5.1",
     "react-apollo-hooks": "^0.4.3",

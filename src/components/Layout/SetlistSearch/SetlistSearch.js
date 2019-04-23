@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Control, Field, Icon, Input } from 'bloomer';
 
@@ -8,8 +8,10 @@ const keyCodes = {
   downArrow: 40,
 };
 
-const SetlistSearch = ({ onSubmit }) => {
-  const [term, setTerm] = useState('');
+const SetlistSearch = ({ initialValue, onSubmit }) => {
+  const [term, setTerm] = useState(initialValue);
+
+  useEffect(() => setTerm(initialValue), [initialValue]);
 
   const handleKeyDown = ({ keyCode }) => {
     switch (keyCode) {
@@ -38,6 +40,7 @@ const SetlistSearch = ({ onSubmit }) => {
 };
 
 SetlistSearch.propTypes = {
+  initialValue: PropTypes.string,
   onSubmit: PropTypes.func,
 };
 
