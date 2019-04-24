@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import GraphqlErrorBoundary from '../graphql/GraphqlErrorBoundary';
 
-const Layout = ({ children }) => (
+const Layout = ({ children, footerLess }) => (
   <>
     <Navbar />
     <Section>
@@ -13,12 +13,13 @@ const Layout = ({ children }) => (
         <GraphqlErrorBoundary>{children}</GraphqlErrorBoundary>
       </Container>
     </Section>
-    <Footer />
+    {!footerLess && <Footer />}
   </>
 );
 
 Layout.propTypes = {
   children: PropTypes.any.isRequired,
+  footerLess: PropTypes.bool,
 };
 
 export default Layout;
