@@ -49,9 +49,13 @@ const Search = ({ location }) => {
       first: 20,
       searchQuery: queryParams.query,
     },
+    // not sure why is this policy needed.
+    fetchPolicy: 'cache-and-network',
   });
 
   const loadMoreSetlists = () => {
+    if (loading) return;
+    if (!(data && data.setlists)) return;
     if (!data.setlists.pageInfo.hasNextPage) return;
     fetchMore({
       variables: {
@@ -59,11 +63,23 @@ const Search = ({ location }) => {
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
+
+        const currentResults = prev.setlists.nodes;
+        const newResults = fetchMoreResult.setlists.nodes;
+        // hotfix | we need a better way (throttling seems not to work properly)
+        // to prevent loadMoreSetlists from being called multiple times almost
+        // at the same time.
+        if (
+          currentResults[currentResults.length - 1].id ===
+          newResults[newResults.length - 1].id
+        )
+          return;
+
         return {
           ...fetchMoreResult,
           setlists: {
             ...fetchMoreResult.setlists,
-            nodes: [...prev.setlists.nodes, ...fetchMoreResult.setlists.nodes],
+            nodes: [...currentResults, ...newResults],
           },
         };
       },
@@ -73,18 +89,16 @@ const Search = ({ location }) => {
   return (
     <Layout footerLess>
       Search results for <em>{queryParams.query}</em>:{' '}
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <h3>{data.setlists.totalCount} results</h3>
-          <SetlistsList
-            items={data.setlists.nodes}
-            onLoadMore={loadMoreSetlists}
-          />
-          {!data.setlists.pageInfo.hasNextPage && <p>No more setlists</p>}
-        </>
-      )}
+      <>
+        <SetlistsList
+          items={data && data.setlists ? data.setlists.nodes : []}
+          onLoadMore={loadMoreSetlists}
+        />
+        {data && data.setlists && !data.setlists.pageInfo.hasNextPage && (
+          <p>No more setlists</p>
+        )}
+        {loading && <div className="loadersmall" />}
+      </>
     </Layout>
   );
 };
