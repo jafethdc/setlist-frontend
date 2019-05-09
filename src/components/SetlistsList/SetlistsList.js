@@ -1,20 +1,9 @@
-import React, { useEffect, useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import useInfiniteScroll from '../../custom-hooks/useInfiniteScroll';
 
 const SetlistsList = ({ items, onLoadMore }) => {
-  const loadMoreSetlists = useCallback(() => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
-    ) {
-      onLoadMore();
-    }
-  }, [onLoadMore]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', loadMoreSetlists);
-    return () => window.removeEventListener('scroll', loadMoreSetlists);
-  }, [loadMoreSetlists]);
+  useInfiniteScroll(onLoadMore);
 
   return (
     <>
