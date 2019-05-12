@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import useInfiniteScroll from '../../custom-hooks/useInfiniteScroll';
+import SetlistItem from './SetlistItem';
 
 const SetlistsList = ({ items, onLoadMore }) => {
   useInfiniteScroll(onLoadMore);
@@ -8,9 +9,7 @@ const SetlistsList = ({ items, onLoadMore }) => {
   return (
     <>
       {items.map(setlist => (
-        <p style={{ fontSize: 30 }} key={setlist.id}>
-          {setlist.id} - {setlist.date} - {setlist.artist.name}
-        </p>
+        <SetlistItem key={setlist.id} setlist={setlist} />
       ))}
     </>
   );

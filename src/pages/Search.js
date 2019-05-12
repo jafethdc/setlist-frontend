@@ -7,8 +7,18 @@ import useQuery from '../custom-hooks/useCustomQuery';
 import SetlistsList from '../components/SetlistsList';
 
 const SEARCH_SETLISTS_QUERY = gql`
-  query GET_SETLISTS($first: Int, $after: String, $searchQuery: String) {
-    setlists(first: $first, after: $after, searchQuery: $searchQuery) {
+  query GET_SETLISTS(
+    $first: Int
+    $after: String
+    $searchQuery: String
+    $orderBy: SetlistOrder
+  ) {
+    setlists(
+      first: $first
+      after: $after
+      searchQuery: $searchQuery
+      orderBy: $orderBy
+    ) {
       totalCount
       totalPageCount
       pageInfo {
@@ -21,6 +31,14 @@ const SEARCH_SETLISTS_QUERY = gql`
         id
         date
         artist {
+          id
+          name
+        }
+        festival {
+          id
+          name
+        }
+        tour {
           id
           name
         }
@@ -46,8 +64,12 @@ const Search = ({ location }) => {
 
   const { data, loading, fetchMore } = useQuery(SEARCH_SETLISTS_QUERY, {
     variables: {
-      first: 20,
+      first: 10,
       searchQuery: queryParams.query,
+      orderBy: {
+        field: 'DATE',
+        direction: 'DESC',
+      },
     },
     // not sure why is this policy needed.
     fetchPolicy: 'cache-and-network',
@@ -88,17 +110,14 @@ const Search = ({ location }) => {
 
   return (
     <Layout footerLess>
-      Search results for <em>{queryParams.query}</em>:{' '}
-      <>
-        <SetlistsList
-          items={data && data.setlists ? data.setlists.nodes : []}
-          onLoadMore={loadMoreSetlists}
-        />
-        {data && data.setlists && !data.setlists.pageInfo.hasNextPage && (
-          <p>No more setlists</p>
-        )}
-        {loading && <div className="loadersmall" />}
-      </>
+      <SetlistsList
+        items={data && data.setlists ? data.setlists.nodes : []}
+        onLoadMore={loadMoreSetlists}
+      />
+      {data && data.setlists && !data.setlists.pageInfo.hasNextPage && (
+        <p>No more setlists</p>
+      )}
+      {loading && <div className="loadersmall" />}
     </Layout>
   );
 };

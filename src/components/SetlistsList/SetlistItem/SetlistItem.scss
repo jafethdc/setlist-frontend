@@ -1,0 +1,18 @@
+.setlist-result {
+    .setlist-date {
+        padding: 0;
+        .setlist-date-content {
+            div:nth-child(2) {
+                font-size: 1.5rem;
+            }
+        }
+    }
+
+    .setlist-title {
+        color: $primary;
+        text-decoration: underline;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
